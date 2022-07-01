@@ -1,21 +1,40 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
-// yup validation schema and formik
+// yup validation schema, formik, auth api with axios
 import { InferType } from "yup";
 import { RegisterSchema } from "../../validation/yup-schema";
 import { Formik } from "formik";
-//components
+import AuthAPI from "../../api/authApi";
+// toastify
+import { toast } from "react-toastify";
+//context and components
+import { AuthContext } from "../../context/auth/authContext";
 import Layout from "../../components/layout/Layout";
 import ButtonForm from "../../components/common/buttons/ButtonForm";
 import FormController from "../../components/form/FormController";
 // /////////////////////////// END OF IMPORTS //////////////////////////
+
 // inferring types from yup validation
 type Props = InferType<typeof RegisterSchema>;
 
 // // MARKUP
 const Register = () => {
+  // global state
+  const { dispatch } = useContext(AuthContext);
+
   // handle form submission
   const handleFormSubmit = async (values: Props) => {
-    console.log(values);
+    try {
+      dispatch({ type: "START_LOADING" });
+      const response = await AuthAPI.postToServer(values, `/auth/register`);
+      console.log(response?.data?.message);
+      toast.success(response?.data?.message);
+      dispatch({ type: "STOP_LOADING" });
+    } catch (error: any) {
+      dispatch({ type: "STOP_LOADING" });
+      console.log(error?.response?.data?.message);
+      toast.error(error?.response?.data?.message);
+    }
   };
   return (
     <Layout>

@@ -1,5 +1,6 @@
 import Layout from "../../components/layout/Layout";
 
+// MARKUP
 const Home = () => {
   return (
     <Layout>

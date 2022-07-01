@@ -1,5 +1,11 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { Link } from "react-router-dom";
+// auth api with axios
+import AuthAPI from "../../../api/authApi";
+// toastify
+import { toast } from "react-toastify";
+//context
+import { AuthContext } from "../../../context/auth/authContext";
 // chakra components and icons
 import { Menu, MenuButton, MenuList, MenuItem, Button } from "@chakra-ui/react";
 import { FaArrowDown } from "react-icons/fa";
@@ -9,11 +15,26 @@ import { FaUserAlt } from "react-icons/fa";
 
 // MARKUP
 const Dropdown: FC = () => {
+  // global state
+  const { state, dispatch } = useContext(AuthContext);
+  // handeling user logging out
+  const logout = async () => {
+    try {
+      const response = await AuthAPI.getFromServer(`/auth/logout`);
+      dispatch({ type: "LOGOUT_USER" });
+      toast.success(response.data.message);
+      localStorage.removeItem("userInfo");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
   return (
     <Menu>
       <MenuButton mr={4} as={Button} rightIcon={<FaArrowDown />}>
         <FaUserAlt className="xl:hidden" />
-        <span className="hidden xl:block">user name</span>
+        <span className="hidden xl:block">
+          {state.user.name ? state.user.name : "username"}
+        </span>
       </MenuButton>
       <MenuList>
         <MenuItem>
@@ -23,11 +44,10 @@ const Dropdown: FC = () => {
         </MenuItem>
         <MenuItem
           className="flex items-center justify-between w-full"
-          onClick={() => {
-            console.log("sign out");
-          }}
+          onClick={logout}
         >
-          <span>Logout</span> <FaUserSlash />
+          <span>Logout</span>
+          <FaUserSlash />
         </MenuItem>
       </MenuList>
     </Menu>

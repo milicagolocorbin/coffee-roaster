@@ -1,9 +1,14 @@
-import { Link } from "react-router-dom";
-// yup validation schema and formik
+import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+// yup validation schema, formik, auth api with axios
 import { InferType } from "yup";
 import { LoginSchema } from "../../validation/yup-schema";
 import { Formik } from "formik";
-//components
+import AuthAPI from "../../api/authApi";
+// toastify
+import { toast } from "react-toastify";
+//context and components
+import { AuthContext } from "../../context/auth/authContext";
 import Layout from "../../components/layout/Layout";
 import ButtonForm from "../../components/common/buttons/ButtonForm";
 import FormController from "../../components/form/FormController";
@@ -14,9 +19,39 @@ type Props = InferType<typeof LoginSchema>;
 
 // MARKUP
 const Login = () => {
+  // react router dom
+  const navigate = useNavigate();
+  // global state
+  const { dispatch } = useContext(AuthContext);
   // handeling form submission
   const handleFormSubmit = async (values: Props) => {
-    console.log(values);
+    dispatch({ type: "START_LOADING" });
+    try {
+      const response = await AuthAPI.postToServer(values, `/auth/login`);
+      if (response.data.user) {
+        dispatch({ type: "LOGIN_USER", payload: response.data });
+        toast.success(response.data.message);
+        localStorage.setItem("userInfo", JSON.stringify({}));
+        if (localStorage.getItem("userInfo")) {
+          localStorage.setItem(
+            "userInfo",
+            JSON.stringify({
+              name: response.data.user.name,
+              expiresAt: response.data.expiresAt,
+            })
+          );
+        } else {
+          return;
+        }
+        navigate("/");
+        dispatch({ type: "STOP_LOADING" });
+      } else {
+        throw Error;
+      }
+    } catch (error: any) {
+      dispatch({ type: "STOP_LOADING" });
+      toast.error(error?.response?.data?.message);
+    }
   };
   return (
     <Layout>

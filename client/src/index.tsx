@@ -4,9 +4,12 @@ import { BrowserRouter } from "react-router-dom";
 // styles
 import "./index.css";
 import { ChakraProvider } from "@chakra-ui/react";
-
-// components
+// context and components
+import { AuthProvider } from "./context/auth/authContext";
 import App from "./app/App";
+// toastify
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -14,9 +17,12 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ChakraProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <AuthProvider>
+        <ToastContainer position="top-left" />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </AuthProvider>
     </ChakraProvider>
   </React.StrictMode>
 );

@@ -1,6 +1,7 @@
-import { FC, useState } from "react";
+import { FC, useContext } from "react";
 import { Link } from "react-router-dom";
-// components and icons
+//context, components and icons
+import { AuthContext } from "../../../context/auth/authContext";
 import LinksNav from "./LinksNav";
 import LinksAuth from "./LinksAuth";
 import Dropdown from "./Dropdown";
@@ -10,7 +11,7 @@ import { FaShoppingCart } from "react-icons/fa";
 // MARKUP
 const Header: FC = () => {
   // local state
-  const [loggedIn] = useState(false);
+  const { state } = useContext(AuthContext);
 
   return (
     <header className="w-full shadow-md h-28 text-slate-900">
@@ -25,7 +26,7 @@ const Header: FC = () => {
         </div>
         <Sidebar />
         <div className="flex items-center justify-end xl:grow">
-          {loggedIn ? <Dropdown /> : <LinksAuth />}
+          {state.auth ? <Dropdown /> : <LinksAuth />}
           <span className="h-8 mr-4 border-l-2 border-teal-600"></span>
           <Link to="/cart/">
             <FaShoppingCart className="w-5 h-5 hover:text-teal-600 hover:scale-110" />
