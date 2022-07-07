@@ -8,7 +8,7 @@ import locations from "./info";
 // MARKUP
 const Footer: FC = () => {
   return (
-    <footer className="w-full py-12 text-center bg-gradient-to-br from-slate-700 to-slate-900 text-zinc-50">
+    <footer className="w-full py-12 text-center text-white bg-gradient-to-br from-slate-700 to-slate-900">
       <Link to="/">
         <img src="/logo-white.svg" alt="logo" className="mx-auto" />
       </Link>

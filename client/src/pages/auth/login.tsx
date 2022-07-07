@@ -31,18 +31,6 @@ const Login = () => {
       if (response.data.user) {
         dispatch({ type: "LOGIN_USER", payload: response.data });
         toast.success(response.data.message);
-        localStorage.setItem("userInfo", JSON.stringify({}));
-        if (localStorage.getItem("userInfo")) {
-          localStorage.setItem(
-            "userInfo",
-            JSON.stringify({
-              name: response.data.user.name,
-              expiresAt: response.data.expiresAt,
-            })
-          );
-        } else {
-          return;
-        }
         navigate("/");
         dispatch({ type: "STOP_LOADING" });
       } else {

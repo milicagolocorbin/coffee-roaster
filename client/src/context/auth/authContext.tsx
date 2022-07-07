@@ -1,6 +1,9 @@
 import React, { useReducer, ReactNode, useEffect } from "react";
 import { reducer, initialState } from "./authReducer";
 import { User, UserAction } from "./modelUser";
+import AuthAPI from "../../api/authApi";
+// toastify
+import { toast } from "react-toastify";
 /////////////////////////// END OF IMPORTS //////////////////////////
 
 // create context
@@ -20,10 +23,18 @@ type Props = {
 const AuthProvider = ({ children }: Props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
-    const userInfoLS: any = localStorage.getItem("userInfo");
-    const userInfo = JSON.parse(userInfoLS);
-    dispatch({ type: "REFRESH_USERS", payload: userInfo });
-    dispatch({ type: "STOP_LOADING" });
+    const getUser = async () => {
+      try {
+        dispatch({ type: "START_LOADING" });
+        const response = await AuthAPI.getFromServer(`/user/get-user`);
+        dispatch({ type: "REFRESH_USERS", payload: response.data });
+        dispatch({ type: "STOP_LOADING" });
+      } catch (error: any) {
+        dispatch({ type: "STOP_LOADING" });
+        toast.error(error?.response?.data?.message);
+      }
+    };
+    getUser();
   }, []);
 
   return (

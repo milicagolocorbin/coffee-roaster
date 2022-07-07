@@ -23,7 +23,6 @@ const Dropdown: FC = () => {
       const response = await AuthAPI.getFromServer(`/auth/logout`);
       dispatch({ type: "LOGOUT_USER" });
       toast.success(response.data.message);
-      localStorage.removeItem("userInfo");
     } catch (error: any) {
       toast.error(error?.response?.data?.message);
     }
@@ -31,8 +30,8 @@ const Dropdown: FC = () => {
   return (
     <Menu>
       <MenuButton mr={4} as={Button} rightIcon={<FaArrowDown />}>
-        <FaUserAlt className="xl:hidden" />
-        <span className="hidden xl:block">
+        <FaUserAlt className="md:hidden" />
+        <span className="hidden md:block">
           {state.user.name ? state.user.name : "username"}
         </span>
       </MenuButton>

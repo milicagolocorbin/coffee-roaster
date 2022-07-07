@@ -17,8 +17,8 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ChakraProvider>
+      <ToastContainer position="top-left" />
       <AuthProvider>
-        <ToastContainer position="top-left" />
         <BrowserRouter>
           <App />
         </BrowserRouter>

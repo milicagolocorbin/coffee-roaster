@@ -14,14 +14,12 @@ const Header: FC = () => {
   const { state } = useContext(AuthContext);
 
   return (
-    <header className="w-full shadow-md h-28 text-slate-900">
-      <div className="flex items-center justify-between w-11/12 h-full mx-auto max-w-screen-2xl">
-        <div className="hidden mx-4 sm:block xl:mx-12 xl:grow">
-          <Link to="/">
-            <img src="/logo.svg" alt="logo" />
-          </Link>
-        </div>
-        <div className="hidden lg:block">
+    <header className="w-full shadow-md text-slate-900">
+      <div className="border-b border-teal-900/10">
+        <img className="block py-5 mx-auto" src="/logo.svg" alt="logo" />
+      </div>
+      <div className="flex items-center justify-between w-11/12 h-full py-5 mx-auto max-w-screen-2xl">
+        <div className="hidden sm:block">
           <LinksNav />
         </div>
         <Sidebar />

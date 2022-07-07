@@ -38,11 +38,8 @@ const reducer = (state: typeof initialState, action: UserAction) => {
   if (action.type === "REFRESH_USERS") {
     return {
       ...state,
-      loading: true,
-      user: {
-        name: action.payload?.name,
-      },
-      auth: new Date().getTime() < action.payload?.expiresAt ? true : false,
+      user: { name: action.payload.user?.name },
+      auth: action.payload.user?.name ? true : false,
     };
   }
   return state;

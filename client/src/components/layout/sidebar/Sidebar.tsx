@@ -19,7 +19,7 @@ const Sidebar: FC = () => {
       <button
         ref={btnRef}
         onClick={onOpen}
-        className="order-first block text-xl text-teal-600"
+        className="order-first block text-xl text-teal-600 sm:hidden"
       >
         <FaBars className="hover:text-teal-700 hover:scale-110" />
       </button>
